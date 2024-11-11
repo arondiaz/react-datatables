@@ -1,42 +1,28 @@
 import DataTable from "react-data-table-component";
-
-const data = [
-  {
-    id: 1,
-    name: "Pepe",
-    age: 23,
-  },
-  {
-    id: 2,
-    name: "Pae",
-    age: 42,
-  },
-  {
-    id: 3,
-    name: "Mark",
-    age: 34,
-  },
-];
-
-const columns = [
-  {
-    name: "ID",
-    selector: (row) => row.id,
-  },
-  {
-    name: "NOMBRE",
-    selector: (row) => row.name,
-  },
-  {
-    name: "EDAD",
-    selector: (row) => row.age,
-  },
-];
+import { useState, useEffect } from "react";
+import { getUsers } from "./getUsers.js";
+import { columns } from "./columns.js";
 
 const App = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getUsers();
+        setUsers(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <DataTable columns={columns} data={data} />
+      <h1>React datatable</h1>
+      <DataTable columns={columns} data={users} pagination/>
     </div>
   );
 };
